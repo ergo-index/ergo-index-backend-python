@@ -1,0 +1,60 @@
+version: '3.3'
+
+services:
+  ergo_index_fund_redis_container:
+    image: redis
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    volumes:
+      - ~/ergo_index_fund_backend_data/redis/data:/data
+      - ~/ergo_index_fund_backend_data/redis/redis.conf:/usr/local/etc/redis/redis.conf
+    container_name: ergo_index_fund_redis_container
+    entrypoint: redis-server --appendonly yes
+  ergo_index_fund_sql_container:
+    image: postgres
+    volumes:
+      - ~/ergo_index_fund_backend_data/postgresql/data:/var/lib/postgresql/data
+    container_name: ergo_index_fund_sql_container
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    command: -p ${POSTGRES_PORT}
+    networks:
+      - ergo-index-fund-backend-network
+  ergo_index_fund_backend_container:
+    build: .
+    ports:
+      - "8082:8082"
+    volumes:
+      - ~/ergo_index_fund_backend_data:/resources
+      - ~/ergo_index_fund_backend_data/logs:/logs
+      - ~/ergo_index_fund_backend_data/debug_data:/debug_data
+      - static_volume:/opt/services/djangoapp/static
+      - media_volume:/opt/services/djangoapp/media
+      - ~/ergo_index_fund_API:/opt/services/ergo_index_fund_api/src
+    container_name: ergo_index_fund_backend_container
+    depends_on:
+      - ergo_index_fund_sql_container
+    networks:
+      - ergo-index-fund-backend-network
+  ergo_index_fund_nginx_container:
+    build: proxy_server
+    ports:
+      - "8081:8081"
+    container_name: ergo_index_fund_nginx_container
+    volumes:
+      - ${FULLCHAIN_FILE}:/certs/fullchain.pem
+      - ${PRIVKEY_FILE}:/certs/privkey.pem
+    depends_on:
+      - ergo_index_fund_backend_container
+    networks:
+      - ergo-index-fund-backend-network
+
+networks:
+  ergo-index-fund-backend-network:
+    driver: bridge
+
+volumes:
+  static_volume:
+  media_volume:

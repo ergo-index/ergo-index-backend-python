@@ -1,0 +1,1 @@
+default_app_config = 'ergo_index_fund_api.apps.ErgoIndexFundAppConfig'

@@ -13,10 +13,13 @@ RUN pip install -r /requirements.txt
 ADD backend backend
 ADD backend/ergo_index_fund_api ergo_index_fund_api
 ADD backend/manage.py /manage.py
+ADD backend/entrypoint.sh /entrypoint.sh
+RUN chmod a+x /entrypoint.sh
 RUN mkdir /sessions
 
 # Populate the sql database with django models and settings.
 CMD ["python", "manage.py", "migrate", "auth"]
+CMD ["python", "manage.py", "migrate", "--noinput"]
 CMD ["python", "manage.py", "createadminuser"]
 # Detect any django changes that need to alter the sql database structure.
 CMD ["python", "manage.py", "makemigrations"]

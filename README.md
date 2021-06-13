@@ -97,9 +97,7 @@ cd ~; rm -rf ergo-index-fund-backend; git clone https://<github_user>:<access_to
 docker exec -it ergo_index_fund_backend_container /bin/bash
   
 # Create admin user in the SQL database.
-python manage.py migrate auth
-python manage.py createadminuser
-python manage.py makemigrations
+python manage.py migrate auth; python manage.py createadminuser; python manage.py makemigrations
 exit
 ```
 </details>

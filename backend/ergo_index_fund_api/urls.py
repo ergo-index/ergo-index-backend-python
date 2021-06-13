@@ -16,8 +16,20 @@ Including another URLconf
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+from backend.ergo_index_fund_api.views import views
+
 urlpatterns = [
     # Auth endpoint.
     path('api/token/new', TokenObtainPairView.as_view()),
     path('api/token/refresh', TokenRefreshView.as_view()),
+
+    # User endpoint.
+    path('api/user/new/', views.new_user),
+    path('api/user/profile/', views.user_profile),
+
+    # Fund endpoint.
+    path('api/fund/save/', views.save_fund),
+
+    # Not-found endpoint.
+    path('', views.do_nothing)
 ]

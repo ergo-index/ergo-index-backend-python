@@ -9,7 +9,7 @@ services:
       - ~/ergo_index_fund_backend_data/redis/data:/data
       - ~/ergo_index_fund_backend_data/redis/redis.conf:/usr/local/etc/redis/redis.conf
     container_name: ergo_index_fund_redis_container
-    entrypoint: redis-server --appendonly yes
+    entrypoint: redis-server --appendonly yes --port ${REDIS_PORT}
   ergo_index_fund_sql_container:
     image: postgres
     volumes:
@@ -36,6 +36,8 @@ services:
     container_name: ergo_index_fund_backend_container
     depends_on:
       - ergo_index_fund_sql_container
+    # Run django migrations after docker-compose up.
+    # command: /entrypoint.sh
     networks:
       - ergo-index-fund-backend-network
   ergo_index_fund_nginx_container:

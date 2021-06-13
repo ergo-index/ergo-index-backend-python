@@ -59,15 +59,22 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True  # TODO: Remove when running in prod
+CORS_ORIGIN_ALLOW_ALL = True # TODO: REMOVE FOR PRODUCTION
 CORS_ORIGIN_WHITELIST = [
     'https://ergo-index.fund:8081',
+    'https://www.ergo-index.fund:8081',
     'http://ergo-index.fund:8082',
+    'http://www.ergo-index.fund:8082',
+    'http://localhost:8082',
+    'https://localhost:8081',
+    'http://localhost:3000',
+    'https://localhost:3000'
 ]
 
 APPEND_SLASH = False
 
 ROOT_URLCONF = 'ergo_index_fund_api.urls'
+
 
 TEMPLATES = [
     {

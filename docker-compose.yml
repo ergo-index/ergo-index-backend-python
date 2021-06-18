@@ -40,19 +40,6 @@ services:
     # command: /entrypoint.sh
     networks:
       - ergo-index-fund-backend-network
-  ergo_index_fund_nginx_container:
-    build: proxy_server
-    ports:
-      - "8081:8081"
-    container_name: ergo_index_fund_nginx_container
-    volumes:
-      - ${FULLCHAIN_FILE}:/certs/fullchain.pem
-      - ${PRIVKEY_FILE}:/certs/privkey.pem
-    depends_on:
-      - ergo_index_fund_backend_container
-    networks:
-      - ergo-index-fund-backend-network
-
 networks:
   ergo-index-fund-backend-network:
     driver: bridge
